@@ -2,21 +2,55 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 
-
-const planetRouter = require('./routes/planets/planets.router');
+const publicPath = path.join(__dirname, '..', 'public');
 
 const app = express();
 
-app.use(cors({
-    origin : 'http://localhost:3000'
-}));
+class Middleware {
 
-app.use(express.json());
-app.use(express.static(path.join(__dirname, '..', 'public')));
+    static configMiddleware() {
+        this.enableCors();
+        this.configBodyParser();
+        this.configStaticFiles();
+    }
 
-app.use(planetRouter);
-app.get('/', (req,res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
-})
+    static enableCors(){
+        app.use(cors({
+            origin : 'http://localhost:3000'
+        }));
+    }
+
+    static configBodyParser(){
+        app.use(express.json());
+    }
+
+    static configStaticFiles() {
+        app.use(express.static(publicPath));
+    }
+
+}
+
+class Routers {
+
+    static setUpAllRouters(){
+        this.setUpHomepageRoute();
+        this.configRouters();
+    }
+
+    static setUpHomepageRoute() {
+        app.get('/', (req,res) => {
+            res.sendFile(path.join(publicPath, 'index.html'));
+        })
+    }
+
+    static configRouters() {
+        const planetRouter = require('./routes/planets/planets.router');
+        app.use(planetRouter);
+    }
+
+}
+
+Middleware.configMiddleware();
+Routers.setUpAllRouters();
 
 module.exports = app;
