@@ -4,6 +4,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 
 const publicPath = path.join(__dirname, '..', 'public');
+const indexPath = path.join(publicPath, 'index.html');
 
 const app = express();
 
@@ -39,19 +40,24 @@ class Middleware {
 class Routers {
 
     static setUpAllRouters(){
-        this.setUpHomepageRoute();
+        
         this.configRouters();
-    }
-
-    static setUpHomepageRoute() {
-        app.get('/', (req,res) => {
-            res.sendFile(path.join(publicPath, 'index.html'));
-        })
+        this.setUpHomepageRoute();
+        
     }
 
     static configRouters() {
-        const planetRouter = require('./routes/planets/planets.router');
-        app.use(planetRouter);
+        const planetsRouter = require('./routes/planets/planets.router');
+        const launchesRouter = require('./routes/launches/launches.router');
+
+        app.use('/planets', planetsRouter);
+        app.use('/launches', launchesRouter);
+    }
+
+    static setUpHomepageRoute() {
+        app.get('/*', (req,res) => {
+            res.sendFile(indexPath);
+        })
     }
 
 }

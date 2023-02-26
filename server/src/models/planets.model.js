@@ -4,7 +4,8 @@ const fs = require('fs');
 
 class PlanetsModel {
     static dataPath = path.join(__dirname, '..', '..', 'data', 'kepler_data.csv');
-    static habitablePlanets =[];
+    static habitablePlanets = [];
+
 
     static getHabitablePlanets() {
         this.loadPlanetsData();
@@ -12,6 +13,7 @@ class PlanetsModel {
     }
 
     static loadPlanetsData() {
+
         const parseOptions = {
             comment: '#',
             columns: true
@@ -33,7 +35,7 @@ class PlanetsModel {
                 .pipe(parse(parseOptions))
                 .on('data', (data) => filterHabitablePlanets(data))
                 .on('error', (err) => errorHandle(err))
-                .on('end', () =>resolve());
+                .on('end', () => resolve());
         }); 
 
     }
@@ -48,13 +50,17 @@ class PlanetsModel {
         }
         
         function isRadiusInRange(planet){
-            return planet['koi_prad'] < 1.6;
+            return planet['koi_prad'] < 1.6
+            
+            ;
         }
         return isConfirmed(planet) && isStellarFluxInRange(planet) && isRadiusInRange(planet);
     }
 
 }
 
+
+
 module.exports = {
-    planets : PlanetsModel.getHabitablePlanets()
+    habitablePlanets : PlanetsModel.getHabitablePlanets()
 }
