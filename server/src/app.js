@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const cors = require('cors');
+const morgan = require('morgan');
 
 const publicPath = path.join(__dirname, '..', 'public');
 
@@ -10,6 +11,7 @@ class Middleware {
 
     static configMiddleware() {
         this.enableCors();
+        this.enableLoggingRequestMorgan();
         this.configBodyParser();
         this.configStaticFiles();
     }
@@ -18,6 +20,10 @@ class Middleware {
         app.use(cors({
             origin : 'http://localhost:3000'
         }));
+    }
+
+    static enableLoggingRequestMorgan(){
+        app.use(morgan('combined'));
     }
 
     static configBodyParser(){
