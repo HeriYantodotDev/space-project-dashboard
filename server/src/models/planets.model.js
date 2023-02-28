@@ -2,14 +2,14 @@ const {parse} = require('csv-parse');
 const path = require('path');
 const fs = require('fs');
 
+const Planets = require('./planets.mongo')
+
 class PlanetsModel {
     static dataPath = path.join(__dirname, '..', '..', 'data', 'kepler_data.csv');
     static habitablePlanets = [];
 
-
-    static getHabitablePlanets() {
-        this.loadPlanetsData();
-        return this.habitablePlanets;
+    static async getHabitablePlanets() {
+        return await Planets.find({});
     }
 
     static loadPlanetsData() {
@@ -19,9 +19,9 @@ class PlanetsModel {
             columns: true
         }
 
-        function filterHabitablePlanets(data) {
+        async function filterHabitablePlanets(data) {
             if (PlanetsModel.isHabitablePlanet(data)) {
-                PlanetsModel.habitablePlanets.push(data)
+                await PlanetsModel.savePlanetToDatabase(data);
             }
         }
 
@@ -31,11 +31,17 @@ class PlanetsModel {
         }
 
         return new Promise((resolve, reject) => {
-            fs.createReadStream(this.dataPath)
+            fs.createReadStream(PlanetsModel.dataPath)
                 .pipe(parse(parseOptions))
                 .on('data', (data) => filterHabitablePlanets(data))
                 .on('error', (err) => errorHandle(err))
-                .on('end', () => resolve());
+                .on('end', async () => {
+									const countPlanetsFound = (await Planets.find({})).length;
+									console.log(` ${countPlanetsFound} founds`);
+									// console.log(Planets.find({}));
+									// console.log(Planets.find({}));
+									resolve();
+								});
         }); 
 
     }
@@ -57,10 +63,24 @@ class PlanetsModel {
         return isConfirmed(planet) && isStellarFluxInRange(planet) && isRadiusInRange(planet);
     }
 
+    static async savePlanetToDatabase(data) {
+        try {
+					await Planets.updateOne({
+							keplerName: data.kepler_name
+					}, {
+							keplerName: data.kepler_name
+					}, {
+							upsert: true
+					});
+        } catch(err) {
+					console.err(`Could not save planet ${err}`);
+				}
+      
+    }
+
 }
 
-
-
 module.exports = {
-    habitablePlanets : PlanetsModel.getHabitablePlanets()
+		loadPlanetsData : PlanetsModel.loadPlanetsData,
+    gethabitablePlanets : PlanetsModel.getHabitablePlanets
 }
