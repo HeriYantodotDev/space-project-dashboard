@@ -2,29 +2,36 @@ const {
     getAllLaunches, 
     addNewLaunch,
     idExists,
-    abortLaunchByID
+    abortLaunchByID,
 } = require('../../models/launches.model');
 
 
-function httpgetAllLaunches(req, res) {
-    return res.status(200).json(getAllLaunches());
+async function httpgetAllLaunches(req, res) {
+    return res.status(200).json(await getAllLaunches());
 }
 
-function httpAbortLaunch (req, res) {
-    const launchID = Number(req.params.id);
+async function httpAbortLaunch (req, res) {
 
-    if (!idExists(launchID)) {
+    try {
+        const launchID = Number(req.params.id);
+        const existanceStatus = await idExists(launchID)
+        
+        if (!existanceStatus) {
+            throw new Error("Launch ID not found");
+        }
+    
+        const aborted = await abortLaunchByID(launchID);
+        return res.status(200).json(aborted);
+        
+    } catch(err) {
         return res.status(404).json({
-            error : 'Launch not found'
-        })
+           error : `${err}`
+        });
     }
-
-    const aborted = abortLaunchByID(launchID);
-    return res.status(200).json(aborted);
+  
 }
 
-
-function httpAddNewLaunch(req, res) {
+async function httpAddNewLaunch(req, res) {
 
     const launch = req.body;
 
@@ -34,7 +41,7 @@ function httpAddNewLaunch(req, res) {
 
     convertIntoDateObject(launch);
 
-    addNewLaunch(launch);
+    await addNewLaunch(launch);
 
     return res.status(201).json(launch);
 }
@@ -74,7 +81,6 @@ function isDateInvalid(launch) {
 function convertIntoDateObject(launch) {
     launch.launchDate = new Date(launch.launchDate);
 }
-
 
 module.exports = {
     httpgetAllLaunches, 

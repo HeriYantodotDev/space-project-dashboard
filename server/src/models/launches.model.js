@@ -1,57 +1,84 @@
 const Launches = require('./launches.mongo');
 
-const launches = new Map();
+const Planets = require('./planets.mongo');
 
-let latestFlightNumber = 100;
+const DEFAULT_FLIGHT_NUMBER = 99;
 
-const initialLaunch = {
-    flightNumber: 100,
-    launchDate: new Date('December 27, 2030'),
-    mission: 'Kepler Exploration ',
-    rocket: 'Explorer IS1',
-    target: 'Kepler-1652 b',
-    customers: ['Yoda', 'Luke'],
-    upcoming: true,
-    success: true
-}
 const launchDefaultValue = {
     customers: ['Yoda', 'Luke'],
     upcoming: true,
     success: true,
 };
 
-launches.set(initialLaunch.flightNumber, initialLaunch);
+async function getAllLaunches() {
+	return await Launches.find(
+		{}, 
+		{ '_id': 0, '__v': 0 }
+	)
+};
 
-function idExists (launchID) {
-    return launches.has(launchID);
-}
+async function addNewLaunch (launchArg) {
 
-function getAllLaunches() {
-    return Array.from(launches.values());
-}
+	try {
+		const planetExistance = await targetPlanetExists(launchArg.target);
 
-function addNewLaunch (launchArg) {
-    latestFlightNumber++;
-    launches.set(
-        latestFlightNumber, setNewLaunchObject(launchArg, latestFlightNumber)
-    );
-}
+		if(!planetExistance) {
+			throw new Error('The target planet doesn\'t exist');
+		}
+	
+		const newLaunchObject = await createNewLaunchObject(launchArg);
+		await Launches.create(newLaunchObject);
 
-function setNewLaunchObject (launchArg) {
-    return Object.assign(launchArg, Object.assign(launchDefaultValue, {flightNumber: latestFlightNumber}) )
-}
+	} catch(err) {
+		console.err(`Could not add new launch${err}`);
+	}
 
-function abortLaunchByID (launchID) {
-    const aborted = launches.get(launchID);
-    aborted.upcoming = false;
-    aborted.success = false;
-    return aborted
-}
+};
 
+async function createNewLaunchObject (launchArg) {
+    return Object.assign(launchArg, Object.assign(launchDefaultValue, await createNewFlightNumberObject()));
+};
+
+async function createNewFlightNumberObject() {
+	const lastFlightNumber = await getLastFlightNumber();
+	return {flightNumber: lastFlightNumber + 1};	
+};
+
+async function getLastFlightNumber(){
+	const lastFlightNumber = await Launches
+	.findOne()
+	.sort('-flightNumber');
+
+	if (!lastFlightNumber) {
+		return DEFAULT_FLIGHT_NUMBER;
+	}
+	
+	return lastFlightNumber.flightNumber;
+};
+
+async function abortLaunchByID (launchID) {
+
+		return await Launches.findOneAndUpdate(
+			{ flightNumber: launchID },
+			{ upcoming: false, success: false},
+			{new: true}
+		);
+
+};
+
+async function idExists (launchID) {
+	const exist = await Launches.exists({ flightNumber: launchID }) !== null;
+	return exist;
+};
+
+async function targetPlanetExists(planet) {
+	const exist = await Planets.exists({ keplerName: planet }) !== null;
+	return exist;
+};
 
 module.exports = {
     getAllLaunches,
     addNewLaunch,
     idExists,
-    abortLaunchByID
-}
+    abortLaunchByID,
+};

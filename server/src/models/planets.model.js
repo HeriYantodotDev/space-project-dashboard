@@ -10,7 +10,7 @@ class PlanetsModel {
     static async getHabitablePlanets() {
         return await Planets.find({}, {
             '_id': 0, '__v': 0
-        });
+        })
     }
 
     static loadPlanetsData() {
@@ -82,6 +82,6 @@ class PlanetsModel {
 }
 
 module.exports = {
-		loadPlanetsData : PlanetsModel.loadPlanetsData,
+	loadPlanetsData : PlanetsModel.loadPlanetsData,
     gethabitablePlanets : PlanetsModel.getHabitablePlanets
 }
