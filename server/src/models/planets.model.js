@@ -6,10 +6,11 @@ const Planets = require('./planets.mongo')
 
 class PlanetsModel {
     static dataPath = path.join(__dirname, '..', '..', 'data', 'kepler_data.csv');
-    static habitablePlanets = [];
 
     static async getHabitablePlanets() {
-        return await Planets.find({});
+        return await Planets.find({}, {
+            '_id': 0, '__v': 0
+        });
     }
 
     static loadPlanetsData() {
