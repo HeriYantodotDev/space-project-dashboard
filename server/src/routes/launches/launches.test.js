@@ -8,6 +8,9 @@ const {
 const app = require('../../app');
 
 describe('Launches API', () => {
+
+    const launchesURL = `/v1/launches`;
+
     beforeAll(async () => {
         await connectMongoDB();
     });
@@ -15,13 +18,12 @@ describe('Launches API', () => {
     afterAll(async () => {
         await disconnectMongoDB();
     }
-
     );
 
     describe('Test GET /launch', () => {
         test('It should respond with 200 success', async () => {
             const response = await request(app)
-            .get('/launches')
+            .get(launchesURL)
             .expect('Content-Type', /json/)
             .expect(200);
         })
@@ -58,7 +60,7 @@ describe('Launches API', () => {
     
         test('It should respond with 201 created', async () => {
             const response = await request(app)
-            .post('/launches')
+            .post(launchesURL)
             .send(completeLaunchData)
             .expect('Content-Type', /json/)
             .expect(201);
@@ -73,7 +75,7 @@ describe('Launches API', () => {
     
         test('It should catch missing required properties', async () => {
             const response = await request(app)
-            .post('/launches')
+            .post(launchesURL)
             .send(launchDataWithoutdate)
             .expect('Content-Type', /json/)
             .expect(400);
@@ -84,7 +86,7 @@ describe('Launches API', () => {
     
         test('It should catch invalid dates', async () => {
             const response = await request(app)
-            .post('/launches')
+            .post(launchesURL)
             .send(LaunchDataWithInvalidDate)
             .expect('Content-Type', /json/)
             .expect(400);
