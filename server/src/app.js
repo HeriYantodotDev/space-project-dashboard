@@ -1,63 +1,59 @@
-const path = require('path');
-const express = require('express');
-const cors = require('cors');
-const morgan = require('morgan');
+const path = require("path");
+const express = require("express");
+const cors = require("cors");
+const morgan = require("morgan");
 
-const v1Router = require('./routes/v1.api');
+const v1Router = require("./routes/v1.api");
 
-const publicPath = path.join(__dirname, '..', 'public');
-const indexPath = path.join(publicPath, 'index.html');
+const publicPath = path.join(__dirname, "..", "public");
+const indexPath = path.join(publicPath, "index.html");
 
 const app = express();
 
 class Middleware {
+  static configMiddleware() {
+    this.enableCors();
+    this.enableLoggingRequestMorgan();
+    this.configBodyParser();
+    this.configStaticFiles();
+  }
 
-    static configMiddleware() {
-        this.enableCors();
-        this.enableLoggingRequestMorgan();
-        this.configBodyParser();
-        this.configStaticFiles();
-    }
+  static enableCors() {
+    app.use(
+      cors({
+        origin: "http://localhost:3000",
+      })
+    );
+  }
 
-    static enableCors(){
-        app.use(cors({
-            origin : 'http://localhost:3000'
-        }));
-    }
+  static enableLoggingRequestMorgan() {
+    app.use(morgan("combined"));
+  }
 
-    static enableLoggingRequestMorgan(){
-        app.use(morgan('combined'));
-    }
+  static configBodyParser() {
+    app.use(express.json());
+  }
 
-    static configBodyParser(){
-        app.use(express.json());
-    }
-
-    static configStaticFiles() {
-        app.use(express.static(publicPath));
-    }
-
+  static configStaticFiles() {
+    app.use(express.static(publicPath));
+  }
 }
 
 class Routers {
+  static setUpAllRouters() {
+    this.configRouters();
+    this.setUpHomepageRoute();
+  }
 
-    static setUpAllRouters(){
-        
-        this.configRouters();
-        this.setUpHomepageRoute();
-        
-    }
+  static configRouters() {
+    app.use("/v1", v1Router);
+  }
 
-    static configRouters() {
-        app.use('/v1', v1Router); 
-    }
-
-    static setUpHomepageRoute() {
-        app.get('/*', (req,res) => {
-            res.sendFile(indexPath);
-        })
-    }
-
+  static setUpHomepageRoute() {
+    app.get("/*", (req, res) => {
+      res.sendFile(indexPath);
+    });
+  }
 }
 
 Middleware.configMiddleware();
