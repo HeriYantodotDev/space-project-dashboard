@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 
+const v1Router = require('./routes/v1.api');
+
 const publicPath = path.join(__dirname, '..', 'public');
 const indexPath = path.join(publicPath, 'index.html');
 
@@ -47,11 +49,7 @@ class Routers {
     }
 
     static configRouters() {
-        const planetsRouter = require('./routes/planets/planets.router');
-        const launchesRouter = require('./routes/launches/launches.router');
-
-        app.use('/planets', planetsRouter);
-        app.use('/launches', launchesRouter);
+        app.use('/v1', v1Router); 
     }
 
     static setUpHomepageRoute() {
