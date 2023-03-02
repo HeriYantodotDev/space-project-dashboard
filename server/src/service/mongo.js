@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const passTemp = 'PWCEIfiG1i1vmXS7';
+require('dotenv').config();
 
-const MONGO_URL = `mongodb+srv://space-project-api:${passTemp}@spacecluster.gqsvg2r.mongodb.net/?retryWrites=true&w=majority`;
+const MONGO_URL = process.env.MONGO_URL;
 
 async function connectMongoDB() {
 	checkMongoDBConnection();

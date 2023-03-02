@@ -1,5 +1,7 @@
 const http = require("http");
 
+require('dotenv').config();
+
 const path = require("path");
 
 const { connectMongoDB } = require(path.join(__dirname, "service", "mongo.js"));
