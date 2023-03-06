@@ -16,6 +16,7 @@ const History = props => {
           <td>{launch.mission}</td>
           <td>{launch.rocket}</td>
           <td>{launch.customers?.join(", ")}</td>
+          <td>{launch.userID.firstName} {launch.userID.lastName}</td>
         </tr>;
       });
   }, [props.launches]);
@@ -33,6 +34,7 @@ const History = props => {
               <th>Mission</th>
               <th style={{width: "7rem"}}>Rocket</th>
               <th>Customers</th>
+              <th>User</th>
             </tr>
           </thead>
           <tbody>

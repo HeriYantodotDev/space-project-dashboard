@@ -33,6 +33,11 @@ const launchesSchema = new mongoose.Schema({
 		type :Boolean,
 		required: true,
 		default: true
+	},
+	userID : {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User',
+		required: true
 	}
 });
 
