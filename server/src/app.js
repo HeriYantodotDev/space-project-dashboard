@@ -2,6 +2,8 @@ const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+const helmet = require('helmet');
+
 
 const v1Router = require("./routes/v1.api");
 
@@ -12,10 +14,15 @@ const app = express();
 
 class Middleware {
   static configMiddleware() {
+    this.enableHelmet();
     this.enableCors();
     this.enableLoggingRequestMorgan();
     this.configBodyParser();
     this.configStaticFiles();
+  }
+
+  static enableHelmet() {
+    app.use(helmet());
   }
 
   static enableCors() {
