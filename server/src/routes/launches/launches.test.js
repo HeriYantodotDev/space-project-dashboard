@@ -9,12 +9,15 @@ const {warningDeleteLaunch} = require('../../models/launches.model');
 
 const app = require('../../app');
 
+const { loadPlanetsData } = require('../../models/planets.model');
+
 describe('Launches API', () => {
 	
 	const launchesURL = `/v1/launches`;
 	
 	beforeAll(async () => {
 		await connectMongoDB();
+		await loadPlanetsData();
 	});
 	
 	afterAll(async () => {
