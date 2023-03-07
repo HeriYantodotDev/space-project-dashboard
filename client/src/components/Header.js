@@ -62,12 +62,13 @@ const styles = theme => ({
   },
 });
 
+const LOG_OUT_URL = `https://localhost:8000/v1/auth/logout`;
 const Header = props => {
-  const { classes, onNav, setSignInStatus, ...rest } = props;
+  const { classes, onNav, ...rest } = props;
   return <ArwesHeader animate>
     <Centered>
       <Words>Welcome : User nameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</Words>
-      <button onClick={() => setSignInStatus(false)}>Sign Out</button>
+      <div><a href={LOG_OUT_URL} >Sign Out</a></div>
     
     </Centered>
     

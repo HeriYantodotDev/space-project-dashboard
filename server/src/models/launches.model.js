@@ -40,7 +40,7 @@ async function addNewLaunch(launchArg) {
 
     await saveLaunchToDatabase(newLaunchObject);
   } catch (err) {
-    console.err(`Could not add new launch${err}`);
+    console.error(`Could not add new launch${err}`);
   }
 }
 
