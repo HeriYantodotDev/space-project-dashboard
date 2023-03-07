@@ -10,36 +10,111 @@ import {
 } from "arwes";
 
 import AppLayout from "./pages/AppLayout";
-
+import LogIn from "./components/LogIn";
 import { theme, resources, sounds } from "./settings";
+import { useState, useEffect } from "react";
 
-import { useState } from "react";
-
+const URL_FETCH_STATUS = 'https://localhost:8000/v1/auth/status'
 
 
 const App = () => {
-  const [signInStatus, setSignInStatus] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  return <ThemeProvider theme={createTheme(theme)}>
-    <SoundsProvider sounds={createSounds(sounds)}>
-      <Arwes animate background={resources.background.large} pattern={resources.pattern}>
-        {
-          signInStatus === true ?
-            
-            anim => (
-              <Router>
-                <AppLayout show={anim.entered} setSignInStatus={setSignInStatus}  />
-              </Router>
-            ) :
-            <div>
-              <h1>Sign In first</h1>
-              <button onClick={() => setSignInStatus(true)}>Sign In</button>
-            </div>
-        
-        }
-      </Arwes>
-    </SoundsProvider>
-  </ThemeProvider>;
+  async function useLoginState() {
+    const response = await fetch(URL_FETCH_STATUS);
+    const data = await response.json();
+    setIsLoggedIn(data.isLoggedIn);
+  }
+
+  useLoginState();
+
+
+  return (
+    <ThemeProvider theme={createTheme(theme)}>
+      <SoundsProvider sounds={createSounds(sounds)}>
+        <Arwes animate background={resources.background.large} pattern={resources.pattern}>
+          {
+            isLoggedIn ?
+              
+              anim => (
+                <Router>
+                  <AppLayout show={anim.entered}  />
+                </Router>
+              ) :
+              <LogIn/>
+          
+          }
+        </Arwes>
+      </SoundsProvider>
+    </ThemeProvider>
+  );
 };
 
 export default App;
+
+
+
+
+
+
+
+// import {
+//   BrowserRouter as Router,
+// } from "react-router-dom";
+// import {
+//   Arwes,
+//   SoundsProvider,
+//   ThemeProvider,
+//   createSounds,
+//   createTheme,
+// } from "arwes";
+
+// import AppLayout from "./pages/AppLayout";
+
+// import LogIn from "./components/LogIn";
+
+// import { theme, resources, sounds } from "./settings";
+
+// import { useState, useEffect } from "react";
+
+// const URL_FETCH_STATUS = 'https://localhost:8000/v1/auth/status'
+
+// function useLoginState() {
+//   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+//   useEffect(() => {
+//     async function fetchLoginStatus() {
+//       const response = await fetch(URL_FETCH_STATUS);
+//       const data = await response.json();
+//       setIsLoggedIn(data.isLoggedIn);
+//     }
+
+//     fetchLoginStatus();
+//   }, []);
+
+//   return isLoggedIn;
+// }
+
+// const App = () => {
+//   const isLoggedIn = useLoginState();
+
+//   return <ThemeProvider theme={createTheme(theme)}>
+//     <SoundsProvider sounds={createSounds(sounds)}>
+//       <Arwes animate background={resources.background.large} pattern={resources.pattern}>
+//         {
+//           isLoggedIn ?
+            
+//             anim => (
+//               <Router>
+//                 <AppLayout show={anim.entered} />
+//               </Router>
+//             ) :
+//             <LogIn/>
+        
+//         }
+//       </Arwes>
+//     </SoundsProvider>
+//   </ThemeProvider>;
+// };
+
+// export default App;

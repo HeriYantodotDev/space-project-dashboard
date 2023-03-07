@@ -16,6 +16,11 @@ const usersSchema = new mongoose.Schema({
 	},
   entries: {
 		type : Number,
+		default: 0,
+		required: true
+	},
+	hash : {
+		type: String,
 		required: true
 	},
 	launches: [{

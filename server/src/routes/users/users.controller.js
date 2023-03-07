@@ -1,5 +1,7 @@
 const {getUserDataByID} = require('../../models/users.model');
 
+const {createNewUser} = require('../../models/users.model');
+
 async function httpGetUserDataByID(req, res) {
   try {
     const userID = Number(req.params.id);
@@ -18,10 +20,41 @@ async function httpGetUserDataByID(req, res) {
 			error : `${err}`
 		});
   }
+}
 
+async function httpCreateNewUser(req,res) {
+  try {
+    const newUser = req.body;
+
+    if (!isInputValid(newUser)) {
+      return res.status(400).json({
+        error: "Missing required property"
+      })
+    }
+
+    newUserData = await createNewUser(newUser);
+
+    if (newUserData.error) {
+      return res.status(400).json({error: newUserData.error});
+    }
+
+    return res.status(200).json(newUserData);
+
+  } catch(err) {
+    return res.status(400).json(err);
+  }
+}
+
+function isInputValid(newUser) {
+  if (!newUser.firstName || !newUser.lastName || !newUser.email || !newUser.pass ) {
+    return false;
+  }
+
+  return true;
 }
 
 module.exports = {
-  httpGetUserDataByID
+  httpGetUserDataByID,
+  httpCreateNewUser
 }
 
