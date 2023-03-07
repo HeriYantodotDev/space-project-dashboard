@@ -14,12 +14,15 @@ const { loadLaunchData } = require("./models/launches.model");
 
 const {setUpSSL} = require('./service/ssl');
 
+const {saveSpaceXUserToDatabase} = require('./models/users.model');
+
 const PORT = process.env.PORT || 8000;
 
 const server = https.createServer( setUpSSL(), app);
 
 async function startServer() {
   await connectMongoDB();
+  await saveSpaceXUserToDatabase();
   await loadData();
   await loadLaunchData();
   

@@ -41,6 +41,7 @@ const Upcoming = props => {
           <td>{launch.mission}</td>
           <td>{launch.rocket}</td>
           <td>{launch.target}</td>
+          <td>{launch.userID.firstName} {launch.userID.lastName}</td>
         </tr>;
       });
   }, [launches, abortLaunch, classes.link]);
@@ -52,12 +53,13 @@ const Upcoming = props => {
       <table style={{tableLayout: "fixed"}}>
         <thead>
           <tr>
-            <th style={{width: "3rem"}}></th>
+            <th style={{width: "2rem"}}></th>
             <th style={{width: "3rem"}}>No.</th>
-            <th style={{width: "10rem"}}>Date</th>
-            <th style={{width: "11rem"}}>Mission</th>
-            <th style={{width: "11rem"}}>Rocket</th>
+            <th style={{width: "9rem"}}>Date</th>
+            <th>Mission</th>
+            <th style={{width: "7rem"}}>Rocket</th>
             <th>Destination</th>
+            <th>User</th>
           </tr>
         </thead>
         <tbody>
