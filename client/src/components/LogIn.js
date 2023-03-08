@@ -4,7 +4,7 @@ import Logo from 'arwes/lib/Logo';
 
 import Footer from './Footer';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 const GOOGLE_AUTH_URL = 'https://localhost:8000/v1/auth/google';
@@ -16,6 +16,15 @@ const LogIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect( ()=> {
+    if (window.location.pathname.includes('/tempURL/failed/googleauth/')) {
+    
+      const error = "Can't Log In with Google. Check Your Email & Password";
+      setErrorMessage(error);
+    }
+  }, []);
+  
 
   const onEmailChange = (event) => {
     setEmail(event.target.value);
