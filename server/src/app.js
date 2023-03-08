@@ -100,23 +100,15 @@ class Middleware {
 
   static async verifyCallback(accessToken, refreshToken, profile, done){
     console.log(`Google Email:, `, profile.emails[0].value);
-    console.log(`First Name:, `, profile.name.givenName);
-    console.log(`Last Name:, `, profile.name.familyName);
-    console.log(`Last Name:, `, profile.displayName);
 
     const emailTaken = await isEmailTaken(profile.emails[0].value);
 
-    console.log(emailTaken);
-
     if (emailTaken) {
       const existingUser = await findUserByEmail(profile.emails[0].value);
-      console.log(existingUser);
       return done(null, existingUser);
     }
 
     const userData = await createNewUserFromGoogle(profile);
-
-    console.log(userData);
 
     return done(null, userData);
   }
@@ -146,12 +138,10 @@ class Middleware {
   static saveAndReadSessionFromCookie() {
 
     passport.serializeUser((user, done) => {
-      console.log(user._id);
       done(null, user._id);
     });
 
     passport.deserializeUser((id, done) => {
-      console.log(id);
       done(null, id);
     });
 

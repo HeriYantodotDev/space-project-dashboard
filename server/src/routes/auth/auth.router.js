@@ -5,6 +5,7 @@ const {
   googleCallBackHandler,
   logOut,
   failure,
+  success,
   loginHandler,
   statusHandler,
 
@@ -21,6 +22,8 @@ authRouter.post('/login', loginHandler);
 authRouter.get('/logout', logOut );
 
 authRouter.get('/failure', failure );
+authRouter.get('/success', success );
+
 authRouter.get('/status', statusHandler)
 
 

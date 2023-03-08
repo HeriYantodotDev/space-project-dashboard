@@ -1,5 +1,17 @@
 const passport = require('passport');
 
+const Joi = require('joi'); 
+
+const httpHeaderStatusName = 'X-AuthenticationStatus-Status';
+const httpHeaderMessageName = 'X-Message';
+const valueHeaderStatusSuccessful = `successful`;
+const valueHeaderStatusFailed = `failed`;
+const successRedirect = "/v1/auth/success";
+const failureRedirect = "/v1/auth/failure";
+const googleSuccessRedirect = "/";
+const googleFailureRedirect = "/";
+
+
 function googleAuthentification(req, res) {
   passport.authenticate('google', {
     scope: ['profile', 'email'],
@@ -7,18 +19,43 @@ function googleAuthentification(req, res) {
 }
 
 function loginHandler(req, res) {
+
+  const schema = generateJoiSchemaForLogin();
+
+  const { error } = schema.validate(req.body);
+
+  if (error) {
+    res.set({
+      [httpHeaderStatusName]: valueHeaderStatusFailed,
+      [httpHeaderMessageName]: `${error.details[0].message}`
+    }); 
+    return res.status(400).json({ 
+      authenticationStatus: false,
+      message: error.details[0].message 
+    });
+  }
+
   passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/failure',
+    failureRedirect: successRedirect,
+    successRedirect: failureRedirect,
     failureFlash: true
   })(req, res);
 
 }
 
+function generateJoiSchemaForLogin() {
+  const schema = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().required()
+  });
+
+  return schema;
+}
+
 function googleCallBackHandler(req, res) {
   passport.authenticate("google", {
-    failureRedirect: "/failure",
-    successRedirect: "/",
+    failureRedirect: googleFailureRedirect,
+    successRedirect: googleSuccessRedirect,
     session: true,
   })(req, res),
   (req, res) => {
@@ -26,69 +63,32 @@ function googleCallBackHandler(req, res) {
   }
 }
 
-
-// function googleCallBackHandler(req, res, next) {
-//   passport.authenticate("google", {
-//     failureRedirect: "/failure",
-//     successRedirect: "/",
-//     session: true,
-//   }, (err, user, info) => {
-//     if (err) {
-//       console.error(err);
-//       return next(err);
-//     }
-//     if (!user) {
-//       console.error(info);
-//       return res.redirect("/failure");
-//     }
-    
-//     console.log("Google Called Back!"); // Moved inside the success callback
-//     return res.redirect("/");
-//   })(req, res, next);
-// }
-
-
-// function googleCallBackHandler(req, res, next) {
-//   passport.authenticate("google", {
-//     failureRedirect: "/failure",
-//     successRedirect: "/",
-//     session: true,
-//   })(req, res, next);
-  
-//   console.log("Google Called Back!"); 
-// }
-
-
-// function googleCallBackHandler(req, res) {
-//   passport.authenticate("google", {
-//     failureRedirect: "/failure",
-//     successRedirect: "/",
-//     session: true,
-//   }, (req, res) => {
-//     console.log("Google Called Back!");
-//   })(req, res);
-// }
-
-
 function logOut(req, res) {
   req.logout();
   return res.redirect("/");
 }
 
-
 function failure(req, res) {
-  res.send("Failed to log in!");
+  res.set({
+    [httpHeaderStatusName] : valueHeaderStatusFailed ,
+    [httpHeaderMessageName]: 'Authentication failed. Please enter a valid email and password.'
+  });  
+  return res.status(400).json({ 
+      authenticationStatus: false,
+      message: "Authentication failed. Please enter a valid email and password."
+    });
 }
 
-function loginHandler(req, res) {
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/failure',
-    failureFlash: true
-  })(req, res);
-
+function success(req, res) {
+  res.set({
+    [httpHeaderStatusName] : valueHeaderStatusSuccessful,
+    [httpHeaderMessageName]: 'OK'
+  });  
+  return res.json({ 
+      authenticationStatus: true,
+      message: "OK"
+    });
 }
-
 
 function statusHandler(req, res) {
   const isLoggedIn = req.isAuthenticated();
@@ -103,4 +103,5 @@ module.exports = {
   failure,
   loginHandler,
   statusHandler,
+  success
 }
