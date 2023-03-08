@@ -37,7 +37,6 @@ async function isEmailTaken(email) {
   return exist !== null;
 }
 
-
 async function createNewUser(newUser) {
   try {
     const hashPassword = await hashThePassword(newUser.pass);
@@ -49,7 +48,6 @@ async function createNewUser(newUser) {
     console.error(`Couldn\'t save new user ${err}`)
   }
 }
-
 
 function createNewUserObject(newUser, hashPassword) {
   const newUserObject = {
@@ -84,8 +82,6 @@ function createNewUserObjectFromGoogle(profile, hashPassword) {
   return newUserObject;
 }
 
-
-
 async function saveSpaceXUserToDatabase() {
   try {
     await saveUserToDatabase(await createSpaceXUserObject());
@@ -116,6 +112,11 @@ async function findUserByEmail(email) {
   return userData;
 }
 
+async function findUserProfileByID(id) {
+  const userProfile = await Users.findById(id, 'firstName lastName email entries');
+  return userProfile;
+}
+
 async function generateRandomPassword() {
   const password = await bcrypt.genSalt(10);
   return password
@@ -127,7 +128,8 @@ module.exports = {
   generateRandomPassword,
   findUserByEmail,
   createNewUserFromGoogle,
-  isEmailTaken
+  isEmailTaken,
+  findUserProfileByID
 }
 
 // async function getLastUserID () {

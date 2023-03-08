@@ -35,7 +35,6 @@ const App = () => {
         <Arwes animate background={resources.background.large} pattern={resources.pattern}>
           {
             isLoggedIn ?
-              
               anim => (
                 <Router>
                   <AppLayout show={anim.entered}  />
