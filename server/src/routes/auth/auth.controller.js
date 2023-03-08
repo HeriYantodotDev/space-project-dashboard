@@ -9,7 +9,7 @@ const valueHeaderStatusFailed = `failed`;
 const successRedirect = "/v1/auth/success";
 const failureRedirect = "/v1/auth/failure";
 const googleSuccessRedirect = "/";
-const googleFailureRedirect = "/";
+const googleFailureRedirect = "/tempURL/failed/googleauth/";
 
 
 function googleAuthentification(req, res) {
