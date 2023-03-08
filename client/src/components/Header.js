@@ -8,6 +8,7 @@ import {
 import { Link } from "react-router-dom";
 import Clickable from "./Clickable";
 import Centered from "./Centered";
+import { useState } from "react";
 
 const styles = theme => ({
   root: {
@@ -63,13 +64,31 @@ const styles = theme => ({
 });
 
 const LOG_OUT_URL = `https://localhost:8000/v1/auth/logout`;
+
+const URL_FETCH_USER_PROFILE = `https://localhost:8000/v1/users/id`
+
 const Header = props => {
   const { classes, onNav, ...rest } = props;
+
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [entries, setEntries] = useState('');
+
+  async function getUserProfile() {
+    const response = await fetch(URL_FETCH_USER_PROFILE);
+    const data = await response.json();
+    setFirstName(data.firstName);
+    setLastName(data.lastName);
+    setEntries(data.entries);
+  }
+
+  getUserProfile();
+
   return <ArwesHeader animate>
-    <Centered>
-      <Words>Welcome : User nameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</Words>
-      <div><a href={LOG_OUT_URL} >Sign Out</a></div>
-    
+    <Centered className="position-relative">
+      <div ><a href={LOG_OUT_URL} >Sign Out</a></div>
+      <Words >Hi, {firstName} {lastName},  You have entried |{entries}| launches </Words>
+      
     </Centered>
     
     <Centered className={classes.root} {...rest}>

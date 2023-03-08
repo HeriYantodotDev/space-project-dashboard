@@ -36,8 +36,8 @@ function loginHandler(req, res) {
   }
 
   passport.authenticate('local', {
-    failureRedirect: successRedirect,
-    successRedirect: failureRedirect,
+    failureRedirect: failureRedirect,
+    successRedirect: successRedirect, 
     failureFlash: true
   })(req, res);
 
@@ -91,6 +91,7 @@ function success(req, res) {
 }
 
 function statusHandler(req, res) {
+  console.log(req.user)
   const isLoggedIn = req.isAuthenticated();
   res.json({ isLoggedIn });
 }

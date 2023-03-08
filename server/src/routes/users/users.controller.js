@@ -1,19 +1,20 @@
-const {getUserDataByID} = require('../../models/users.model');
+const {findUserProfileByID} = require('../../models/users.model');
 
 const {createNewUser} = require('../../models/users.model');
 
-async function httpGetUserDataByID(req, res) {
+async function httpGetUserProfileByID(req, res) {
   try {
-    const userID = Number(req.params.id);
-    const userData = await getUserDataByID(userID);
+    const userID = req.user;
+    if (!userID) {
+      throw new Error("No User ID is provided");
+    }
+    const userProfile = await findUserProfileByID(userID);
 
-    console.log(userData === null);
-
-    if (userData === null) {
+    if (userProfile === null) {
 			throw new Error("User ID not found");
 		}
 
-    return res.status(200).json(userData);
+    return res.status(200).json(userProfile);
 
   } catch(err) {
     return res.status(404).json({
@@ -54,7 +55,7 @@ function isInputValid(newUser) {
 }
 
 module.exports = {
-  httpGetUserDataByID,
+  httpGetUserProfileByID,
   httpCreateNewUser
 }
 
