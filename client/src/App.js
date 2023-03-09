@@ -12,21 +12,40 @@ import {
 import AppLayout from "./pages/AppLayout";
 import LogIn from "./components/LogIn";
 import { theme, resources, sounds } from "./settings";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const URL_FETCH_STATUS = 'https://localhost:8000/v1/auth/status'
 
 
-const App = () => {
+function useLoginState() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch(URL_FETCH_STATUS);
+      const data = await response.json();
+      setIsLoggedIn(data.isLoggedIn);
+    }
 
-  async function useLoginState() {
-    const response = await fetch(URL_FETCH_STATUS);
-    const data = await response.json();
-    setIsLoggedIn(data.isLoggedIn);
-  }
+    fetchData();
 
-  useLoginState();
+  }, []);
+
+  return isLoggedIn;
+}
+
+
+const App = () => {
+  const isLoggedIn = useLoginState();
+
+  //without using useEffect
+  // async function useLoginState() {
+  //   const response = await fetch(URL_FETCH_STATUS);
+  //   const data = await response.json();
+  //   setIsLoggedIn(data.isLoggedIn);
+  // }
+
+  // useLoginState();
 
 
   return (
