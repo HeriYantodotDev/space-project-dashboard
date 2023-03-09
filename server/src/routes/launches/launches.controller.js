@@ -39,6 +39,8 @@ async function httpAbortLaunch (req, res) {
 async function httpAddNewLaunch(req, res) {
 	
 	const launch = req.body;
+
+	const userID = req.user;
 	
 	if (isInputInvalid(launch).status) {
 		return res.status(400).json(isInputInvalid(launch).error);
@@ -46,7 +48,7 @@ async function httpAddNewLaunch(req, res) {
 	
 	convertIntoDateObject(launch);
 	
-	await addNewLaunch(launch);
+	await addNewLaunch(launch, userID);
 	
 	return res.status(201).json(launch);
 }

@@ -2,9 +2,11 @@ const Launches = require("./launches.mongo");
 
 const Planets = require("./planets.mongo");
 
-const Users = require("./users.mongo")
-
-const {getUserDataByID} = require("../models/users.model");
+const {
+  findUserByEmail,
+  findUserProfileByID,
+  entriesIncrement
+} = require("./users.model");
 
 const mongoose = require('mongoose');
 
@@ -15,9 +17,16 @@ const DEFAULT_FLIGHT_NUMBER = 99;
 const launchDefaultValue = {
   customers: ["Yoda", "Luke"],
   upcoming: true,
-  success: true,
-	userID: 1
+  success: true
 };
+
+async function saveLaunchToDatabase(launch) {
+  try {
+    await Launches.updateOne(launch, launch, { upsert: true });
+  } catch (err) {
+    console.err(`Could not save launch ${err}`);
+  }
+}
 
 async function getAllLaunches(skip, limit) {
 
@@ -28,7 +37,7 @@ async function getAllLaunches(skip, limit) {
     .limit(limit);
 }
 
-async function addNewLaunch(launchArg) {
+async function addNewLaunch(launchArg, userID) {
   try {
     const planetExistance = await targetPlanetExists(launchArg.target);
 
@@ -36,27 +45,33 @@ async function addNewLaunch(launchArg) {
       throw new Error("The target planet doesn't exist");
     }
 
-    const newLaunchObject = await createNewLaunchObject(launchArg);
+    const user = await findUserProfileByID(userID)
+    
+    const newLaunchObject = await createNewLaunchObject(launchArg, user);
 
     await saveLaunchToDatabase(newLaunchObject);
+
+    await entriesIncrement(user._id);
+
   } catch (err) {
     console.error(`Could not add new launch${err}`);
   }
 }
 
-async function saveLaunchToDatabase(launch) {
-  try {
-    await Launches.updateOne(launch, launch, { upsert: true });
-  } catch (err) {
-    console.err(`Could not save launch ${err}`);
-  }
-}
+async function createNewLaunchObject(launchArg, user) {
 
-async function createNewLaunchObject(launchArg) {
-  return Object.assign(
+  const userIDObject = { userID: user._id }
+  const newObjectWithoutUserID = Object.assign(
     launchArg,
     Object.assign(launchDefaultValue, await createNewFlightNumberObject())
   );
+
+  const newObjectWithID = Object.assign(
+    newObjectWithoutUserID, 
+    userIDObject
+  );
+
+  return newObjectWithID
 }
 
 async function createNewFlightNumberObject() {
@@ -168,12 +183,13 @@ function constantForPopulateAllLaunches() {
 
 async function MapAndSaveAllLauncesDataFromAPI(response) {
   const launchDocs = response.data.docs;
+  const spaceXEmail = "elon.musk@gmail.com";
 
   let counter = 0;
 
   process.stdout.write(`Saving Data to Database ... `);
 
-  const user = await Users.findOne({ email: "elon.musk@gmail.com" });
+  const user = await findUserByEmail({email: spaceXEmail});
 
   for (const launchDoc of launchDocs) {
     //we're using .flatMap()
