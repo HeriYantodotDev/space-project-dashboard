@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 const API_URL = 'https://localhost:8000/v1';
 const postContentType = {
   "Content-Type": "application/json"
@@ -32,9 +34,17 @@ async function httpSubmitLaunch(launch) {
 
 async function httpAbortLaunch(id) {
   try {
-    return await fetch(`${API_URL}/launches/${id}`, {
+    // modify the code to alert if something error. 
+    const response = await fetch(`${API_URL}/launches/${id}`, {
       method: "delete"
-    })
+    });
+    const data = await response.json();
+
+    if (data.error) {
+      toast.error(data.error);
+    }
+
+     
   } catch(err) {
     return {
       oke: false

@@ -106,6 +106,7 @@ async function getLastFlightNumber() {
 }
 
 async function abortLaunchByID(launchID) {
+
   return await Launches.findOneAndUpdate(
     { flightNumber: launchID },
     { upcoming: false, success: false },
@@ -119,7 +120,7 @@ async function targetPlanetExists(planet) {
 }
 
 async function idExists(launchID) {
-  const exist = await launchExist(launchID);
+  const exist = await launchExist({flightNumber: launchID});
   return exist;
 }
 
@@ -279,6 +280,11 @@ async function warningDeleteLaunch(launch) {
   await Launches.deleteOne(launch);
 }
 
+async function findUserIDByFlightNumber(launchID) {
+  const userID = await Launches.findOne({ flightNumber: launchID }, 'userID' );
+  return userID;
+}
+
 module.exports = {
   getAllLaunches,
   addNewLaunch,
@@ -287,4 +293,5 @@ module.exports = {
   loadLaunchData,
   launchExist,
   warningDeleteLaunch,
+  findUserIDByFlightNumber
 };

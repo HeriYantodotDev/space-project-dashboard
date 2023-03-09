@@ -22,6 +22,9 @@ import Launch from "./Launch";
 import History from "./History";
 import Upcoming from "./Upcoming";
 
+import { ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const styles = () => ({
   content: {
     display: "flex",
@@ -62,6 +65,7 @@ const AppLayout = props => {
   
   return <div className={classes.content}>
     <Header onNav={animateFrame} setSignInStatus={props.setSignInStatus}  />
+    <ToastContainer />
     <Centered className={classes.centered}>
       <Frame animate 
         show={frameVisible} 

@@ -3,6 +3,7 @@ const {
 	addNewLaunch,
 	idExists,
 	abortLaunchByID,
+	findUserIDByFlightNumber
 } = require('../../models/launches.model');
 
 const {
@@ -17,14 +18,23 @@ async function httpgetAllLaunches(req, res) {
 }
 
 async function httpAbortLaunch (req, res) {
-	
 	try {
+
+
 		const launchID = Number(req.params.id);
+		const cookiesUserID = req.user;
+
 		const existanceStatus = await idExists(launchID)
 		
 		if (!existanceStatus) {
 			throw new Error("Launch ID not found");
 		}
+
+		const userIDsCheck = await areUserIDsTheSame(launchID, cookiesUserID);
+
+		if (!userIDsCheck) {
+			throw new Error("You can only modify your own Launches data! You can't modify Space-X Launches data");
+		}  
 		
 		const aborted = await abortLaunchByID(launchID);
 		return res.status(200).json(aborted);
@@ -34,7 +44,18 @@ async function httpAbortLaunch (req, res) {
 			error : `${err}`
 		});
 	}
+}
+
+async function areUserIDsTheSame (launchID, cookiesUserID ) {
 	
+	const launchUserID = await findUserIDByFlightNumber(launchID);
+	const launchUserIDString = launchUserID.userID.toString();
+
+	if (cookiesUserID === launchUserIDString) {
+		return true;
+	}  
+
+	return false;
 }
 
 async function httpAddNewLaunch(req, res) {
