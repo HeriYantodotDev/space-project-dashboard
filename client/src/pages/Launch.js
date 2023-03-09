@@ -12,8 +12,8 @@ const Launch = props => {
   const today = new Date().toISOString().split("T")[0];
 
   return <Appear id="launch" animate show={props.entered}>
-    <Paragraph>Schedule a mission launch for interstellar travel to one of the Kepler Exoplanets.</Paragraph>
-    <Paragraph>Only confirmed planets matching the following criteria are available for the earliest scheduled missions:</Paragraph>
+    <Paragraph>Let's blast off on an interstellar adventure! Time to schedule a mission launch and head towards one of the Kepler Exoplanets, who's with me?</Paragraph>
+    <Paragraph>Attention space enthusiasts! Our earliest scheduled missions will only target confirmed planets that meet the following out-of-this-world criteria:</Paragraph>
     <ul>
       <li>Planetary radius &lt; 1.6 times Earth's radius</li>
       <li>Effective stellar flux &gt; 0.36 times Earth's value and &lt; 1.11 times Earth's value</li>

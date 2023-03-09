@@ -38,11 +38,14 @@ function useLaunches(onSuccessSound, onAbortSound, onFailureSound) {
     if (success) {
       getLaunches();
       setTimeout(() => {
-        setPendingLaunch(false);
         onSuccessSound();
-      }, 800);
+        setPendingLaunch(false);
+      }, 200);
     } else {
-      onFailureSound();
+      setTimeout(() => {
+        onFailureSound();
+        setPendingLaunch(false);
+      }, 200);
     }
   }, [getLaunches, onSuccessSound, onFailureSound]);
 
