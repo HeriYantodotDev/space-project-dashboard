@@ -11,9 +11,9 @@ const api = express.Router();
 
 // api.use(checkLoggedin);
 
-api.use('/planets', planetsRouter);
-api.use('/launches', launchesRouter);
-api.use('/users', usersRouter);
+api.use('/planets', checkLoggedin, planetsRouter);
+api.use('/launches', checkLoggedin,  launchesRouter);
+api.use('/users', checkLoggedin, usersRouter);
 api.use('/auth', authRouter);
 
 module.exports = api;

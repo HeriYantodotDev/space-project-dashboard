@@ -9,7 +9,7 @@ const {
 const launchesRouter = express.Router();
 
 launchesRouter.get('/', httpgetAllLaunches);
-launchesRouter.post('/', httpAddNewLaunch);
+launchesRouter.post('/',  httpAddNewLaunch);
 launchesRouter.delete('/:id', httpAbortLaunch);
 
 module.exports = launchesRouter;

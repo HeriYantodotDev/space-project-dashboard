@@ -4,9 +4,7 @@ function checkLoggedin(req, res, next) {
   const isLoggedIn = req.isAuthenticated();
 
   if (!isLoggedIn) {
-    return res.status(404).json({ 
-      message: "Please Log In First"
-    });
+    return res.redirect('/tempURL/mustLogIn');
   }
   next();
 }
