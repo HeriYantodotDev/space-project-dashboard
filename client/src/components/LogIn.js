@@ -19,8 +19,10 @@ const LogIn = () => {
 
   useEffect( ()=> {
     if (window.location.pathname.includes('/tempURL/failed/googleauth/')) {
-    
       const error = "Can't Log In with Google. Check Your Email & Password";
+      setErrorMessage(error);
+    } else if (window.location.pathname.includes('/tempURL/mustLogIn')) {
+      const error = "You Must Log In First";
       setErrorMessage(error);
     }
   }, []);
