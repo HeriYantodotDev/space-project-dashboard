@@ -19,8 +19,6 @@ async function httpgetAllLaunches(req, res) {
 
 async function httpAbortLaunch (req, res) {
 	try {
-
-
 		const launchID = Number(req.params.id);
 		const cookiesUserID = req.user;
 
@@ -40,7 +38,7 @@ async function httpAbortLaunch (req, res) {
 		return res.status(200).json(aborted);
 		
 	} catch(err) {
-		return res.status(404).json({
+		return res.status(400).json({
 			error : `${err}`
 		});
 	}
@@ -59,20 +57,29 @@ async function areUserIDsTheSame (launchID, cookiesUserID ) {
 }
 
 async function httpAddNewLaunch(req, res) {
-	
-	const launch = req.body;
+	try {
+		const launch = req.body;
 
-	const userID = req.user;
-	
-	if (isInputInvalid(launch).status) {
-		return res.status(400).json(isInputInvalid(launch).error);
+		const userID = req.user;
+
+		const checkInputValidity = isInputInvalid(launch);
+		
+		if (checkInputValidity.status) {
+			return res.status(400).json({error: checkInputValidity.error});
+		}
+		
+		convertIntoDateObject(launch);
+		
+		await addNewLaunch(launch, userID);
+		
+		return res.status(201).json(launch);
+
+	} catch(err) {
+		return res.status(400).json({
+			error : `${err}`
+		});
 	}
-	
-	convertIntoDateObject(launch);
-	
-	await addNewLaunch(launch, userID);
-	
-	return res.status(201).json(launch);
+
 }
 
 function isInputInvalid(launch) {

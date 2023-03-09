@@ -19,12 +19,25 @@ async function httpGetLaunches() {
 }
 
 async function httpSubmitLaunch(launch) {
+  //add toast when it successful.
   try {
-    return await fetch(`${API_URL}/launches`, {
+    const response = await fetch(`${API_URL}/launches`, {
       method: "post",
       headers: postContentType,
       body: JSON.stringify(launch),
     })
+
+    if (response.status === 201) {
+      toast.success("🚀 A new launch is created!");
+    }
+
+    if (response.status === 400) {
+      const data = await response.json();
+      toast.error(data.error);
+    }
+
+    return response;
+
   } catch(err) {
     return {
       ok: false
@@ -34,17 +47,22 @@ async function httpSubmitLaunch(launch) {
 
 async function httpAbortLaunch(id) {
   try {
-    // modify the code to alert if something error. 
     const response = await fetch(`${API_URL}/launches/${id}`, {
       method: "delete"
     });
+
+    if (response.status === 200) {
+      toast.success("😢 Your launch is deleted");
+    }
+
     const data = await response.json();
 
     if (data.error) {
-      toast.error(data.error);
+      toast.error(`${data.error}`);
     }
 
-     
+    return response;
+
   } catch(err) {
     return {
       oke: false
