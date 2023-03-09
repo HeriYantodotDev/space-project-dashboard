@@ -28,8 +28,24 @@ async function saveLaunchToDatabase(launch) {
   }
 }
 
-async function getAllLaunches(skip, limit) {
+async function getAllLaunches(skip, limit, userID) {
 
+  const user = await findUserProfileByID(userID);
+  const elonMuskID = await findUserProfileByID('6406a8695b84e6fc4c45c97f');
+  console.log(user._id);
+  console.log(elonMuskID._id);
+  const filter = { userID: { $in: [user._id, elonMuskID._id] } }
+  
+  return await Launches.find(filter, { _id: 0, __v: 0 })
+    .populate('userID', 'firstName lastName')
+    .sort({ flightNumber: -1 })
+    .skip(skip)
+    .limit(limit);
+}
+
+async function getAllLaunchesAdmin(skip, limit, userID) {
+  const user = findUserProfileByID(userID);
+  
   return await Launches.find({}, { _id: 0, __v: 0 })
     .populate('userID', 'firstName lastName')
     .sort({ flightNumber: 1 })
