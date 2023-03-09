@@ -113,14 +113,28 @@ async function findUserByEmail(email) {
 }
 
 async function findUserProfileByID(id) {
-  const userProfile = await Users.findById(id, 'firstName lastName email entries');
+  const userProfile = await Users.findById(id, '_id firstName lastName email entries');
   return userProfile;
+}
+
+async function findEntriesByID(id) {
+  const userEntries = await Users.findById(id, 'entries');
+  return userEntries;
+}
+
+async function entriesIncrement(id) {
+  const userEntries = await findEntriesByID(id);
+  const newEntries = userEntries.entries + 1;
+
+  await Users.findByIdAndUpdate(id, { entries: newEntries });
+
 }
 
 async function generateRandomPassword() {
   const password = await bcrypt.genSalt(10);
   return password
 }
+
 module.exports = {
   saveSpaceXUserToDatabase,
   saveUserToDatabase,
@@ -129,7 +143,8 @@ module.exports = {
   findUserByEmail,
   createNewUserFromGoogle,
   isEmailTaken,
-  findUserProfileByID
+  findUserProfileByID,
+  entriesIncrement
 }
 
 // async function getLastUserID () {
