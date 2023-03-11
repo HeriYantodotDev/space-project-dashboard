@@ -19,7 +19,7 @@ function useLaunches(onSuccessSound, onAbortSound, onFailureSound) {
     getLaunches();
   }, [getLaunches]);
 
-  const submitLaunch = useCallback(async (e) => {
+  const submitLaunch = useCallback(async (e, ) => {
     e.preventDefault();
     setPendingLaunch(true);
     const data = new FormData(e.target);
@@ -47,6 +47,8 @@ function useLaunches(onSuccessSound, onAbortSound, onFailureSound) {
         setPendingLaunch(false);
       }, 200);
     }
+
+    e.target.reset();
   }, [getLaunches, onSuccessSound, onFailureSound]);
 
   const abortLaunch = useCallback(async (id) => {
