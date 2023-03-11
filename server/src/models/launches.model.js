@@ -285,6 +285,11 @@ async function findUserIDByFlightNumber(launchID) {
   return userID;
 }
 
+async function getFlightNumberByTestFilterObject(filter) {
+  const flightNumber = await Launches.findOne(filter, 'flightNumber');
+  return flightNumber;
+}
+
 module.exports = {
   getAllLaunches,
   addNewLaunch,
@@ -293,5 +298,6 @@ module.exports = {
   loadLaunchData,
   launchExist,
   warningDeleteLaunch,
-  findUserIDByFlightNumber
+  findUserIDByFlightNumber,
+  getFlightNumberByTestFilterObject
 };
