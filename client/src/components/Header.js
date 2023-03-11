@@ -8,7 +8,7 @@ import {
 import { Link } from "react-router-dom";
 import Clickable from "./Clickable";
 import Centered from "./Centered";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const styles = theme => ({
   root: {
