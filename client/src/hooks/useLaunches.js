@@ -47,6 +47,8 @@ function useLaunches(onSuccessSound, onAbortSound, onFailureSound) {
         setPendingLaunch(false);
       }, 200);
     }
+
+    e.target.reset();
   }, [getLaunches, onSuccessSound, onFailureSound]);
 
   const abortLaunch = useCallback(async (id) => {

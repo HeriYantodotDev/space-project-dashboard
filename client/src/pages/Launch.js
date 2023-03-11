@@ -23,11 +23,12 @@ const Launch = props => {
       <label htmlFor="launch-day">Launch Date</label>
       <input type="date" id="launch-day" name="launch-day" min={today} max="2040-12-31" defaultValue={today} />
       <label htmlFor="mission-name">Mission Name</label>
-      <input type="text" id="mission-name" name="mission-name" />
+      <input type="text" id="mission-name" name="mission-name" placeholder="Your Mission Name"/>
       <label htmlFor="rocket-name">Rocket Type</label>
-      <input type="text" id="rocket-name" name="rocket-name" defaultValue="Explorer IS1" />
+      <input type="text" id="rocket-name" name="rocket-name" placeholder="Your Rocket Name" />
       <label htmlFor="planets-selector">Destination Exoplanet</label>
-      <select id="planets-selector" name="planets-selector">
+      <select id="planets-selector" name="planets-selector" defaultValue="">
+      <option value="" disabled selected style={{color: 'gray', fontStyle: 'italic', backgroundColor: 'yellow'}}>Select a planet</option>
         {selectorBody}
       </select>
       <Clickable>
