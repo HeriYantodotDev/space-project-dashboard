@@ -69,3 +69,4 @@ or without container name
 ```
 docker run -it -p 8000:8000 --env-file=/home/heri/Projects/space-project-repetition/server/.env heriyantodotdev/space-project
 ```
+Adding
