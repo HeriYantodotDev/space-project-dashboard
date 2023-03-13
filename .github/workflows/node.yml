@@ -14,6 +14,9 @@ jobs:
       CLIENT_SECRET: ${{ secrets.CLIENT_SECRET}}
       COOKIE_KEY_1: ${{ secrets.COOKIE_KEY_1}}
       COOKIE_KEY_2: ${{ secrets.COOKIE_KEY_2}}
+      USER_TEST_EMAIL: ${{ secrets.USER_TEST_EMAIL }}
+      USER_TEST_PASS: ${{ secrets.USER_TEST_PASS }}
+      USER_TEST_OBJECTID: ${{ secrets.USER_TEST_OBJECTID }}
     strategy:
       matrix: 
         node-version: [16.x, 18.x]
