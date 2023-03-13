@@ -12,7 +12,8 @@
     "server": "npm run watch --prefix server",
     "client": "npm run start --prefix client",
     "deploy": "npm run build --prefix client && npm start --prefix server",
-    "deploy-cluster": "npm run build --prefix client && npm run cluster --prefix server"
+    "deploy-cluster": "npm run build --prefix client && npm run cluster --prefix server",
+    "deploy-pm2-runtime": "npm run build --prefix client && npm run pm2-runtime --prefix server"
   },
   "keywords": [],
   "author": "",

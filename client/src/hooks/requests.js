@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 
-const API_URL = 'https://localhost:8000/v1';
+const API_URL = 'v1';
 const postContentType = {
   "Content-Type": "application/json"
 };

@@ -63,9 +63,9 @@ const styles = theme => ({
   },
 });
 
-const LOG_OUT_URL = `https://localhost:8000/v1/auth/logout`;
+const LOG_OUT_URL = `v1/auth/logout`;
 
-const URL_FETCH_USER_PROFILE = `https://localhost:8000/v1/users/id`;
+const URL_FETCH_USER_PROFILE = `v1/users/id`;
 
 
 const Header = props => {
