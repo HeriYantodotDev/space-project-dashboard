@@ -11,6 +11,8 @@ const {
 
 const request = require('supertest');
 
+require('dotenv').config();
+
 const ObjectId = require('mongoose').Types.ObjectId;
 
 const {
@@ -22,7 +24,11 @@ const app = require('../../app');
 
 let agent;
 
-const userObjectIDForTest = '6406b10e5b84e6fc4c4c5852';
+const USER_TEST_EMAIL = process.env.USER_TEST_EMAIL;
+
+const USER_TEST_PASS = process.env.USER_TEST_PASS;
+
+const userObjectIDForTest = process.env.USER_TEST_OBJECTID;
 
 const completeLaunchData = {
 	mission: 'Yoda - Testing @#$%',
@@ -63,7 +69,7 @@ describe('Launches API', () => {
 		agent = request.agent(app);
 
 		const result = await agent.post('/v1/auth/login')
-			.send({ email: 'sheldon@gmail.com', password: '123' })
+			.send({ email: USER_TEST_EMAIL , password: USER_TEST_PASS })
 			.expect(302);
   });
 	

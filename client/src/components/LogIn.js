@@ -7,8 +7,8 @@ import Footer from './Footer';
 import { useEffect, useState } from 'react';
 
 
-const GOOGLE_AUTH_URL = 'https://localhost:8000/v1/auth/google';
-const LOGIN_AUTH_URL = 'https://localhost:8000/v1/auth/login';
+const GOOGLE_AUTH_URL = 'v1/auth/google';
+const LOGIN_AUTH_URL = 'v1/auth/login';
 
 
 

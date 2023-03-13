@@ -14,7 +14,7 @@ import LogIn from "./components/LogIn";
 import { theme, resources, sounds } from "./settings";
 import { useState, useEffect } from "react";
 
-const URL_FETCH_STATUS = 'https://localhost:8000/v1/auth/status'
+const URL_FETCH_STATUS = 'v1/auth/status'
 
 
 function useLoginState() {
