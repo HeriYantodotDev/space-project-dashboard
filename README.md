@@ -69,4 +69,13 @@ or without container name
 ```
 docker run -it -p 8000:8000 --env-file=/home/heri/Projects/space-project-repetition/server/.env heriyantodotdev/space-project
 ```
-Adding
+
+in EC2
+
+```
+docker run --restart=always -p 80:80 --env-file=//home/ec2-user/.env heriyantodotdev/space-project 
+```
+
+Deployment:
+
+Copy the .env to the instance 

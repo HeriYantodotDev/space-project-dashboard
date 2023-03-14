@@ -87,10 +87,10 @@ const Header = props => {
   getUserProfile();
 
   return <ArwesHeader animate>
-    <Centered className="position-relative">
+    <Centered >
       <div ><a href={LOG_OUT_URL} >Sign Out</a></div>
       <Words >Hi, {firstName} {lastName},  You have entried |{entries}| launches </Words>
-      
+  
     </Centered>
     
     <Centered className={classes.root} {...rest}>
