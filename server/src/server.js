@@ -18,7 +18,7 @@ const {saveSpaceXUserToDatabase} = require('./models/users.model');
 
 const PORT = process.env.PORT || 8000;
 
-const server = https.createServer( setUpSSL(), app);
+const server = https.createServer(setUpSSL(), app);
 
 async function startServer() {
   await connectMongoDB();

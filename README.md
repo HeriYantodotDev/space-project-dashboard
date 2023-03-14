@@ -76,6 +76,12 @@ in EC2
 docker run --restart=always -p 80:80 --env-file=//home/ec2-user/.env heriyantodotdev/space-project 
 ```
 
+push:
+
+```
+docker push heriyantodotdev/space-project 
+```
+
 Deployment:
 
 Copy the .env to the instance 
