@@ -64,8 +64,8 @@ const AppLayout = props => {
   const planets = usePlanets();
   
   return <div className={classes.content}>
-    <Header onNav={animateFrame} setSignInStatus={props.setSignInStatus}  />
     <ToastContainer />
+    <Header onNav={animateFrame} setSignInStatus={props.setSignInStatus}  />
     <Centered className={classes.centered}>
       <Frame animate 
         show={frameVisible} 

@@ -12,9 +12,9 @@ const Launch = props => {
   const today = new Date().toISOString().split("T")[0];
 
   return <Appear id="launch" animate show={props.entered}>
-    <Paragraph>Let's blast off on an interstellar adventure! Time to schedule a mission launch and head towards one of the Kepler Exoplanets, who's with me?</Paragraph>
+    <Paragraph >Let's blast off on an interstellar adventure! Time to schedule a mission launch and head towards one of the Kepler Exoplanets, who's with me?</Paragraph>
     <Paragraph>Attention space enthusiasts! Our earliest scheduled missions will only target confirmed planets that meet the following out-of-this-world criteria:</Paragraph>
-    <ul>
+    <ul >
       <li>Planetary radius &lt; 1.6 times Earth's radius</li>
       <li>Effective stellar flux &gt; 0.36 times Earth's value and &lt; 1.11 times Earth's value</li>
     </ul>
@@ -37,7 +37,7 @@ const Launch = props => {
           type="submit" 
           layer="success" 
           disabled={props.isPendingLaunch}>
-          Launch Mission ✔
+        Launch ✔
         </Button>
       </Clickable>
       {props.isPendingLaunch &&

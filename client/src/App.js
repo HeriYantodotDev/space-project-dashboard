@@ -14,6 +14,7 @@ import LogIn from "./components/LogIn";
 import { theme, resources, sounds } from "./settings";
 import { useState, useEffect } from "react";
 
+
 const URL_FETCH_STATUS = 'v1/auth/status'
 
 
@@ -58,8 +59,8 @@ const App = () => {
                 <Router>
                   <AppLayout show={anim.entered}  />
                 </Router>
-              ) :
-              <LogIn/>
+              ) 
+              : <LogIn/>
           
           }
         </Arwes>
