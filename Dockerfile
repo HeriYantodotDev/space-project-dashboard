@@ -21,4 +21,4 @@ RUN npm install pm2 -g
 
 CMD ["npm", "run", "pm2-runtime", "--prefix", "server"]
 
-EXPOSE 8000
+EXPOSE 8080

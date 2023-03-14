@@ -1,4 +1,4 @@
-const https = require("https");
+const http = require("http");
 
 require('dotenv').config();
 
@@ -12,13 +12,13 @@ const { loadPlanetsData } = require("./models/planets.model");
 
 const { loadLaunchData } = require("./models/launches.model");
 
-const {setUpSSL} = require('./service/ssl');
+// const {setUpSSL} = require('./service/ssl');
 
 const {saveSpaceXUserToDatabase} = require('./models/users.model');
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 
-const server = https.createServer(setUpSSL(), app);
+const server = http.createServer(app);
 
 async function startServer() {
   await connectMongoDB();
