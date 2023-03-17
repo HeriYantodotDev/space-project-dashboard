@@ -1,87 +1,106 @@
-The Space-Project Mission Control
-=================================
-***Sub Title***
-**@HeriYantodotDev**
+# The Space-Project Mission Control
 
-# Overview
-Hi There! This is my fun project!
-Live link: [soon]
+By @HeriYantodotDev
 
-# Project Goal
-Will update it later
+## Overview
+Greetings! I'm excited to share one of my fun projects with you, which is also a part of my ongoing learning journey. 
 
-# Project Solution
-Will update it later
+This is a NodeJS application with full stack capabilities that replicates a Mission Control Dashboard. Incorporate Google OAuth for secure authentication and api.spacexdata.com for accessing Space-X Launches Data. Here's the [Project Detail](https://profile.heriyanto.dev/show/33940/fun-project-space-project)
 
-# Architecture Diagram
-Will update it later
+Here's [the live link](https://missioncontrol.heriyanto.dev/) for the web app. To try out the app without logging in with your Google Account, you can use the test account provided in the login page.
 
-The architecture diagram for this project : [link](https://1drv.ms/u/s!AiZUfaWsJp6thIxRoT4Mt-_pPaCDOg?e=7IPjUc).
+Here's the quick demo video:
 
-# How to use this Repo
-Will update it later
+[![Space Project](https://img.youtube.com/vi/mSUeVy3Loqk/0.jpg)](https://www.youtube.com/watch?v=mSUeVy3Loqk)
 
-## Instalation
-
-- `npm run deploy`. This will build the front-end into `public` directory in the `server` directory and run the `server.js`
-
-- `npm run deploy cluster`. This will build the front-end into `public` directory in the `server` and then run the `server.js` using `PM2`.
-
-- `npm run deploy-pm2-runtime`. This will build the front-end into `public` directory in the `server` directory and run the `server.js` using `pm2-runtime`.
-
-## Set Up Environment Variable
-
-### dotenv
-Under the server directory create a file `.env` There are several environment variables  :
-
-- PORT
-- MONGO_URL
-- ELON_PAST
-- CLIENT_ID
-- CLIENT_SECRET
-- COOKIE_KEY_1
-- COOKIE_KEY_2
-- USER_TEST_EMAIL
-- USER_TEST_PASS
-- USER_TEST_OBJECTID
-- CERT_PEM
-- KEY_PEMclear
-
-Please set it up properly using `dotenv` package
+Here is the architecture diagram for this project, which shows the various components and their interactions: [Visio Diagram](https://onedrive.live.com/redir?resid=AD9E26ACA57D5426!67153&authkey=!AKE-DLfv6T2ggzo&e=7IPjUc)
+![Space Project Architecture!](https://project-assets.showwcase.com/96636/1678867507611-space-project%2520architecture.png)
 
 
-## Set Up Docker
+## How to use this Repo
+Here are the easy-to-follow steps for using this repo:
 
-Build Docker Image: 
+### Clone the repo
 
+Navigate to the desired folder in your command line to use this repo
 ```
-docker build . -t heriyantodotdev/space-project 
+git clone https://github.com/HeriYantodotDev/space-project-dashboard.git
+
+cd space-project-dashboard
+
+code .
 ```
 
-Run docker while passing the env variables: 
+### Installation
 
-```
-docker run -it -p 8000:8000 --name space-project --env-file=/home/heri/Projects/space-project-repetition/server/.env heriyantodotdev/space-project
-```
+-  To install both packages in both the Client and Server directories, follow these steps: 
+    ```
+    npm run install
+    ```
 
-or without container name 
+- To get started, set up your MongoDB Atlas account at https://www.mongodb.com/atlas/database. It's a user-friendly platform that's free to use.
 
-```
-docker run -it -p 8000:8000 --env-file=/home/heri/Projects/space-project-repetition/server/.env heriyantodotdev/space-project
-```
+- Then you have to set up Google OAuth credentials here: https://console.cloud.google.com/apis/credentials. 
 
-in EC2
+- Set Up Environment Variable. Create `.env` within the `server` directory. The write down the Environment Variable that we need. 
+  ```
+  PORT=8080
+  MONGO_URL=<the MongoDB URL that you've just set up above>
+  ELON_PASS=<this is the password for elon_musk account>
+  CLIENT_ID=<Copy paste the Google OAuth CLIENT ID>
+  CLIENT_SECRET=<Copy paste the Google OAuth CLIENT Secret>
+  COOKIE_KEY_1=<just type what ever you like here. It's just a key for cookie>
+  COOKIE_KEY_2=<just type what ever you like here. It's just a key for cookie>
+  USER_TEST_EMAIL=<email for testing>
+  USER_TEST_PASS=<user password for testing account>
+  USER_TEST_OBJECTID=<testing accout user Object ID>
+  ```
 
-```
-docker run --restart=always -p 80:80 --env-file=//home/ec2-user/.env heriyantodotdev/space-project 
-```
+### Run the application
 
-push:
+- `npm run deploy`: This command builds the front-end into the `public` directory within the `server` directory and runs the `server.js` file.
 
-```
-docker push heriyantodotdev/space-project 
-```
+- `npm run deploy cluster`: This command builds the front-end into the `public` directory within the `server` directory and runs the `server.js` file using `PM2`.
 
-Deployment:
+- `npm run deploy-pm2-runtime`: This command builds the front-end into the `public` directory within the `server` directory and runs the `server.js` file using `pm2-runtime`.
 
-Copy the .env to the instance 
+
+### Run the application using docker
+
+First you have to ensure that you've already installed Docker in your machine. The easiest way to do this is to install Docker Desktop. 
+
+- Build Docker Image: 
+    
+    ```
+    docker build . -t <image-name>
+    heriyantodotdev/space-project 
+    ```
+    For the image name, you can use this convention `<your DockerHub user name>/<project-name>`. For example:
+
+    ```
+    docker build . -t heriyantodotdev/space-project 
+    ```
+
+- Run docker while passing the env variables: 
+  ```
+  docker run -it -p 8080:8080 --name space-project --env-file=<file path> <Docker Image Name>
+  ```
+
+  For example:
+
+  ```
+  docker run -it -p 8080:8080 --name space-project --env-file=/home/heri/Projects/space-project-repetition/server/.env heriyantodotdev/space-project
+  ```
+
+- Push your Docker Image to Docker Hub
+  
+  This is optional if you'd like to push it to online repo. Please ensure that your already login. You can type `docker login` to check.
+
+  ```
+  docker push <docker-image-name>
+  ```
+  For example:
+
+  ```
+  docker push heriyantodotdev/space-project 
+  ```
